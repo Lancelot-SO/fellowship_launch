@@ -185,7 +185,7 @@ D. A. Twum Jnr. Fellowship
               <span className="text-white">The</span>
               <span className="italic text-gold py-1">D. A. Twum Jnr. Fellowship</span>
               <span className="text-white relative inline-block">
-                Launch Event.
+                Launch Event
               </span>
             </h1>
 
@@ -268,7 +268,7 @@ D. A. Twum Jnr. Fellowship
             You're <span className="italic text-gold">invited.</span>
           </h2>
           <p className="text-[11px] opacity-40 mb-10 font-sans tracking-wide">
-            Fill in your details below. Takes less than 2 minutes.
+            Confirm your attendance. It only takes a minute.
           </p>
 
           <form className="space-y-5" onSubmit={handleSubmit}>
