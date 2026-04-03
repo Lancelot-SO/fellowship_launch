@@ -7,7 +7,12 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        'gold': '#bfa36a',
+        'dark-green': '#002b1b',
+      },
       fontFamily: {
+
         handwriting: ['"Great Vibes"', 'cursive'],
         playfair: ['"Playfair", serif'],
         openSans: ['"Open Sans", sans-serif']

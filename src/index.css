@@ -5,3 +5,54 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans text-white antialiased m-0 p-0;
+    background-color: #000;
+  }
+}
+
+@layer utilities {
+  .font-serif {
+    font-family: 'Playfair Display', serif;
+  }
+  .font-sans {
+    font-family: 'Outfit', sans-serif;
+  }
+  
+  /* Global Hide Scrollbar */
+  *::-webkit-scrollbar {
+    display: none !important;
+  }
+  * {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+}
+
+@layer components {
+  /* Pixel-Perfect Custom Checkbox */
+  .custom-checkbox {
+    @apply appearance-none w-5 h-5 border border-gold/40 bg-black/40 rounded-none cursor-pointer transition-all flex-shrink-0 relative;
+  }
+  .custom-checkbox:checked {
+    @apply border-gold bg-gold/20;
+  }
+  .custom-checkbox:checked::after {
+    content: '';
+    @apply absolute left-[6px] top-[2px] w-[6px] h-3 border-r-2 border-b-2 border-gold rotate-45;
+  }
+
+  /* Precision Custom Select */
+  .custom-select {
+    @apply appearance-none bg-black/40 border border-white/5 rounded-none p-4 pr-10 text-xs focus:outline-none focus:border-gold/30 transition-all text-white w-full;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23bfa36a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1rem;
+  }
+}
+
+
+
