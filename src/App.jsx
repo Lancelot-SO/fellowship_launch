@@ -178,19 +178,19 @@ D. A. Twum Jnr. Fellowship
                 <div className="w-7 h-7 border border-gold/30 flex items-center justify-center transition-all group-hover:border-gold">
                   <div className="w-1 h-1 rounded-full bg-gold/50 shadow-[0_0_6px_#bfa36a]"></div>
                 </div>
-                <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 group-hover:opacity-60 transition-opacity"> 9th April 2026 at 15:30 GMT</p>
+                <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 group-hover:opacity-60 transition-opacity"> Venue: Labadi Beach Hotel </p>
               </div>
               <div className="flex items-center gap-6 group">
                 <div className="w-7 h-7 border border-gold/30 flex items-center justify-center transition-all group-hover:border-gold">
                   <div className="w-2 h-2 rotate-45 border border-gold/60 transition-colors"></div>
                 </div>
-                <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 group-hover:opacity-60 transition-opacity">Labadi Beach Hotel</p>
+                <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 group-hover:opacity-60 transition-opacity">Date: April 9, 2026 </p>
               </div>
               <div className="flex items-center gap-6 group">
                 <div className="w-7 h-7 border border-gold/30 flex items-center justify-center transition-all group-hover:border-gold">
                   <div className="w-1.5 h-1.5 rotate-45 bg-gold/30 transition-all group-hover:bg-gold"></div>
                 </div>
-                <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 group-hover:opacity-60 transition-opacity">By The Ninani Group</p>
+                <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 group-hover:opacity-60 transition-opacity">Time: 3:30 PM</p>
               </div>
             </div>
           </div>
