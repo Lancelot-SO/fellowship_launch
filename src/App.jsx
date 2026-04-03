@@ -289,21 +289,14 @@ const App = () => {
                   <p className="text-[11px] font-bold tracking-wide group-hover:text-gold transition-colors">
                     I agree to the <span className="underline decoration-gold/30 hover:text-gold transition-colors" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsToSOpen(true); }}>Terms of Service</span> and <span className="underline decoration-gold/30 hover:text-gold transition-colors" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsPrivacyOpen(true); }}>Privacy Policy</span>.
                   </p>
-                  <p className="text-[9px] leading-relaxed opacity-30 font-light">
-                    By registering, you consent to being contacted by email (and optionally WhatsApp) about this event and future Fellowship activities. You can unsubscribe at any time.
-                  </p>
+
                 </div>
               </label>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-px bg-border-green/20">
-                <button type="submit" disabled={loading} className="btn-primary sm:flex-[2] py-6 tracking-[0.3em]">
+                <button type="submit" disabled={loading} className="btn-primary py-6 tracking-[0.3em]">
                   {loading ? 'Processing...' : 'Accept Invitation'}
                 </button>
-                <div className="bg-panel-green sm:flex-1 p-4 sm:p-6 text-center sm:text-left flex items-center">
-                  <p className="text-[8px] opacity-30 leading-relaxed tracking-wide uppercase font-medium">
-                    Your details are handled securely and never sold.
-                  </p>
-                </div>
               </div>
             </div>
           </form>
