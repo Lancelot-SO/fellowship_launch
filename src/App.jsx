@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import circles from './assets/circles.png'
 import { supabase } from './lib/supabaseClient'
+import logo from './assets/main_logo.png'
 import { toast } from 'react-toastify'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, X } from 'lucide-react'
+import { X, Calendar, MapPin, Clock, ChevronDown } from 'lucide-react'
 import emailjs from '@emailjs/browser'
 
 const App = () => {
@@ -15,6 +15,7 @@ const App = () => {
     phone: '',
     city: '',
     organisation: '',
+    source: '',
     consent: false
   })
 
@@ -42,12 +43,13 @@ const App = () => {
           phone: formData.phone,
           city: formData.city,
           organisation: formData.organisation,
+          source: formData.source,
           consent: formData.consent
         }])
 
       if (error) throw error
 
-      // Send Confirmation Email via EmailJS
+      // Send Confirmation Email
       try {
         const templateParams = {
           full_name: formData.fullName,
@@ -56,7 +58,6 @@ const App = () => {
           city: formData.city,
           organisation: formData.organisation
         }
-
         await emailjs.send(
           import.meta.env.VITE_EMAILJS_SERVICE_ID,
           import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
@@ -65,340 +66,201 @@ const App = () => {
         )
       } catch (emailError) {
         console.warn('Email confirmation failed to send:', emailError)
-        // We don't throw here so the user still sees their registration was successful
       }
 
-      toast.success('Invitation accepted successfully! Check your email for confirmation.')
+      toast.success('Invitation accepted successfully!')
       setFormData({
         fullName: '',
         email: '',
         phone: '',
         city: '',
         organisation: '',
+        source: '',
         consent: false
       })
+      setIsFormOpen(false)
     } catch (error) {
-      console.error('Error:', error)
       if (error.code === '23505') {
-        toast.error('You have already registered with this email address.')
+        toast.error('This email is already registered for the event.')
       } else {
-        toast.error(error.message || 'An error occurred during registration. Please try again.')
+        toast.error(error.message || 'Something went wrong. Please try again.')
       }
     } finally {
       setLoading(false)
     }
   }
 
-  // Reactive Breakpoint Handling
-  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false)
-
+  const [isMobile, setIsMobile] = useState(false)
   useEffect(() => {
-    const handleResize = () => {
-      const mobile = window.innerWidth < 768
-      setIsMobile(mobile)
-      // If switching to desktop, ensure form state is consistent
-      if (!mobile) setIsFormOpen(false)
-    }
-
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
   return (
-    <div className={`flex flex-col md:flex-row h-full min-h-screen md:h-screen bg-black text-white font-sans overflow-y-auto overflow-x-hidden md:overflow-hidden relative no-scrollbar`}>
-      {/* Mobile Drag Handle - Middle Right */}
-      {!isFormOpen && (
-        <motion.button
-          initial={{ x: 20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setIsFormOpen(true)}
-          className="md:hidden fixed top-1/2 right-0 -translate-y-1/2 z-[100] bg-gold text-black py-5 px-1.5 rounded-l-2xl flex flex-col items-center gap-2 shadow-[-4px_0_20px_rgba(0,0,0,0.4)] border-y border-l border-white/20"
-        >
-          <ChevronLeft size={18} className="animate-pulse" />
-          <span className="[writing-mode:vertical-lr] rotate-180 text-[10px] font-black tracking-[0.25em] uppercase">Register</span>
-        </motion.button>
-      )}
+    <div className="flex flex-col md:flex-row min-h-screen bg-deep-green text-cream font-body overflow-x-hidden relative no-scrollbar">
 
-      {/* Left Section: Hero & Event Details */}
-      <div className="relative w-full md:w-1/2 min-h-screen md:h-full flex flex-col justify-between">
-        {/* Deep Emerald-Black Overlay */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: 'url(/assets/images/fellowship-bg.png)' }}
-        >
-          <div className="absolute inset-0 bg-[#001a12]/85 md:bg-[#001a12]/75"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#001a12] via-transparent to-transparent"></div>
+      {/* LEFT PANEL: HERO CONTENT */}
+      <div className="w-full md:w-1/2 min-h-screen relative flex flex-col justify-between overflow-hidden">
+        {/* Cinematic Backdrop */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black/80 z-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-deep-green via-transparent to-transparent z-10"></div>
+          <img
+            src="/assets/images/fellowship-bg.png"
+            alt="Office background"
+            className="w-full h-full object-cover scale-110"
+          />
         </div>
 
-        {/* Decorative Geometric Asset (Subtle Radar Grid) */}
-        <img
-          src={circles}
-          alt=""
-          className="absolute -bottom-20 -right-20 w-[110%] h-auto opacity-[0.02] pointer-events-none select-none"
-        />
-
         {/* Content Container */}
-        <div className="relative h-full flex flex-col justify-between p-10 md:p-14 lg:p-20 z-10 md:overflow-hidden">
-          {/* Top Branding */}
-          {/* <div className="space-y-1 md:mb-14 mb-16">
-            <p className="text-[14px] md:text-[11px] tracking-[0.1em] font-medium text-white opacity-90 font-serif">
-              The 
-D. A. Twum Jnr. Fellowship
-            </p>
-            <p className="text-[12px] md:text-[9px] tracking-[0.35em] font-bold text-gold uppercase opacity-80">
-              The Ninani Group · Ghana
-            </p>
-          </div> */}
+        <div className="relative z-20 flex-1 flex flex-col justify-between p-8 md:p-16 lg:p-24">
+          <div className="space-y-12 md:space-y-16">
+            {/* Top Branding */}
+            <div className="flex items-center gap-6 group cursor-default">
+              <motion.div
+                initial={{ rotate: -10, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+                className="w-16 h-16 md:w-20 md:h-20 relative"
+              >
+                <div className="absolute inset-0 bg-gold/20 rounded-full blur-xl animate-pulse"></div>
+                <img src={logo} alt="Fellowship Logo" className="w-full h-full object-contain relative z-10 drop-shadow-2xl" />
+              </motion.div>
 
-          {/* Main Hero Content */}
-          <div className="max-w-xl py-12 md:py-4">
-            {/* <div className="flex items-center gap-4 mb-10 translate-x-[-4px]">
-              <div className="w-10 h-[0.5px] bg-gold opacity-60"></div>
-              <p className="text-[9px] font-bold tracking-[0.5em] text-gold uppercase">Launch Event</p>
-              <div className="w-1 h-1 rounded-full bg-gold opacity-80"></div>
-            </div> */}
+            </div>
 
-            <h1 className="text-6xl md:text-5xl lg:text-6xl font-serif tracking-tighter mb-10 leading-[0.85] flex flex-col">
-              <span className="text-white">The</span>
-              <span className="italic text-gold py-1">D. A. Twum Jnr. Fellowship</span>
-              <span className="text-white relative inline-block">
-                Launch Event
-              </span>
-            </h1>
-
-            <p className="text-xs md:text-sm leading-relaxed opacity-40 mb-10 max-w-sm font-sans font-light tracking-wide">
-              Join us for the official launch of the D.A. Twum Jnr. Fellowship — an evening honouring a pioneer of Ghanaian advertising and marking the beginning of a new chapter for creative talent in Ghana.
-            </p>
-
-            {/* Event Meta Detail Squares - Delicate Scale */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-6 group">
-                <div className="w-7 h-7 border border-gold/30 flex items-center justify-center transition-all group-hover:border-gold">
-                  <div className="w-1 h-1 rounded-full bg-gold/50 shadow-[0_0_6px_#bfa36a]"></div>
-                </div>
-                <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 group-hover:opacity-60 transition-opacity"> Venue: Labadi Beach Hotel </p>
-              </div>
-              <div className="flex items-center gap-6 group">
-                <div className="w-7 h-7 border border-gold/30 flex items-center justify-center transition-all group-hover:border-gold">
-                  <div className="w-2 h-2 rotate-45 border border-gold/60 transition-colors"></div>
-                </div>
-                <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 group-hover:opacity-60 transition-opacity">Date: April 9, 2026 </p>
-              </div>
-              <div className="flex items-center gap-6 group">
-                <div className="w-7 h-7 border border-gold/30 flex items-center justify-center transition-all group-hover:border-gold">
-                  <div className="w-1.5 h-1.5 rotate-45 bg-gold/30 transition-all group-hover:bg-gold"></div>
-                </div>
-                <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 group-hover:opacity-60 transition-opacity">Time: 3:30 PM</p>
+            {/* Main Hero Content */}
+            <div className="max-w-xl">
+              <div className="mb-8"><div className="badge-pill"><div className="dot"></div><span>Launch Event</span></div></div>
+              <h1 className="text-[40px] md:text-headline-lg lg:text-headline-xl font-display mb-8 leading-[0.9] tracking-tight">
+                The <span className="italic text-gold">Fellowship</span> <br />
+                <span className="opacity-90">Begins.</span>
+              </h1>
+              <p className="text-body max-w-sm mb-12 text-white">Join us for the official launch of the D.A. Twum Jnr. Fellowship — an evening honouring a pioneer and marking a new chapter for creative talent.</p>
+              <div className="space-y-4 text-white">
+                <div className="detail-item"><Calendar size={14} className="icon" /><span>9th April 2026</span></div>
+                <div className="detail-item"><Clock size={14} className="icon" /><span>15:30 GMT</span></div>
+                <div className="detail-item"><MapPin size={14} className="icon" /><span>Labadi Beach Hotel, Accra</span></div>
               </div>
             </div>
           </div>
-
-          {/* Left Panel Footer - Minimalist Privacy */}
-          <div className="mt-auto pt-10">
-            <div className="w-full h-[0.5px] bg-[#858483] opacity-60 mb-2"></div>
-            <p className="text-[8px] opacity-20 leading-relaxed font-sans tracking-[0.1em] text-center md:text-left uppercase">
-              Your information is collected solely for event management and agreed communications. You may unsubscribe at any time.
-            </p>
+          <div className="mt-16 md:mt-0">
+            <div className="w-12 h-[1px] bg-gold/30 mb-4"></div>
+            <p className="text-fine opacity-20 uppercase tracking-[0.2em]">Innovating with purpose.</p>
           </div>
         </div>
+
+        {/* Mobile RSVP Trigger */}
+        {isMobile && !isFormOpen && (
+          <motion.button initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} onClick={() => setIsFormOpen(true)} className="fixed bottom-8 left-8 right-8 z-50 btn-primary shadow-2xl">
+            Accept Invitation
+          </motion.button>
+        )}
       </div>
 
-
-
-      {/* Right Section: Draggable Registration Form */}
+      {/* RIGHT PANEL: REGISTRATION */}
       <motion.div
-        drag={isMobile ? "x" : false}
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.05}
-        onDragEnd={(e, { offset, velocity }) => {
-          if (isMobile && (offset.x > 100 || velocity.x > 500)) setIsFormOpen(false)
-          else if (isMobile && (offset.x < -100 || velocity.x < -500)) setIsFormOpen(true)
-        }}
-        initial={false}
-        animate={{
-          x: isMobile ? (isFormOpen ? 0 : '100%') : 0
-        }}
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="w-full md:w-1/2 bg-dark-green h-full overflow-y-auto overflow-x-hidden no-scrollbar p-6 md:p-10 lg:p-12 flex flex-col justify-start fixed md:static top-0 right-0 z-50 md:z-auto shadow-[-20px_0_40px_rgba(0,0,0,0.5)] md:shadow-none"
+        className={`w-full md:w-1/2 bg-panel-green min-h-screen relative z-40 flex flex-col p-8 md:p-14 lg:p-16 
+          ${isMobile ? (isFormOpen ? 'fixed inset-0 overflow-y-auto' : 'hidden') : 'static'}`}
+        initial={isMobile ? { y: '100%' } : false}
+        animate={isMobile && isFormOpen ? { y: 0 } : false}
       >
-        {/* Close Button - Mobile Only */}
-        <button
-          onClick={() => setIsFormOpen(false)}
-          className="md:hidden absolute top-1 left-1 w-10 h-10 border border-white/10 flex items-center justify-center rounded-full bg-black/20 text-gold z-50"
-        >
-          <X size={20} />
-        </button>
+        {/* Mobile Close */}
+        {isMobile && (
+          <button onClick={() => setIsFormOpen(false)} className="absolute top-8 right-8 text-gold-muted hover:text-gold z-50"><X size={24} /></button>
+        )}
 
-        {/* Decorative Assets */}
-        <img src={circles} alt="" className="absolute -top-16 -left-16 w-64 h-64 opacity-[0.03] pointer-events-none select-none" />
-        <img src={circles} alt="" className="absolute -bottom-24 -right-24 w-80 h-80 opacity-[0.05] pointer-events-none select-none rotate-12" />
-
-        <div className="max-w-2xl mx-auto w-full relative z-10 pt-4">
-          {/* Top Divider Line (Mockup Detail) */}
-
+        <div className="max-w-2xl mx-auto w-full relative pt-4">
           <div className="flex items-center justify-end gap-3 mb-8">
-            <div className="flex-1 h-[0.5px] bg-gold opacity-20"></div>
-            <p className="text-[9px] font-bold tracking-[0.4em] text-gold uppercase whitespace-nowrap">RSVP</p>
+            <div className="flex-1 h-[1px] bg-gold opacity-10"></div>
+            <p className="text-xs font-bold tracking-[0.4em] text-gold uppercase whitespace-nowrap">RSVP</p>
           </div>
 
-          <h2 className="text-5xl md:text-6xl font-serif mb-2 leading-tight text-white">
-            You're <span className="italic text-gold">invited.</span>
+          <h2 className="text-5xl md:text-6xl font-display mb-3 leading-tight">
+            You're <span className="text-accent-italic text-gold italic">invited.</span>
           </h2>
-          <p className="text-[11px] opacity-40 mb-10 font-sans tracking-wide">
-            Confirm your attendance. It only takes a minute.
+          <p className="text-[11px] opacity-40 mb-10 font-body tracking-wide">
+            Fill in your details below. Takes less than 2 minutes.
           </p>
 
-          <form className="space-y-5" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="space-y-12">
 
             {/* SECTION 1: YOUR DETAILS */}
-            <div className="space-y-5">
-              <div className="flex items-center gap-5">
-                <div className="flex-1 h-[0.5px] bg-gold/10"></div>
-                <p className="text-[9px] font-bold tracking-[0.4em] text-white opacity-80 uppercase whitespace-nowrap">Your Details</p>
-                <div className="flex-1 h-[0.5px] bg-gold/10"></div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div className="space-y-2.5">
-                  <div className="flex justify-between items-center group">
-                    <label className="text-[9px] font-bold tracking-[0.25em] uppercase text-gold">Full Name</label>
-                    <span className="text-gold text-[10px] leading-none opacity-80">*</span>
-                  </div>
-                  <input
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    required
-                    type="text"
-                    placeholder="Your full name"
-                    className="w-full bg-black/30 border border-white/5 p-3.5 text-[11px] focus:outline-none focus:border-gold/30 placeholder:opacity-20 text-white"
-                  />
+            <div className="space-y-6">
+              <div className="divider-label"><span className="text-section-label">Your Details</span></div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center"><label>Full Name</label><span className="text-gold text-[10px]">*</span></div>
+                  <input name="fullName" value={formData.fullName} onChange={handleInputChange} required type="text" placeholder="Your full name" />
                 </div>
-                <div className="space-y-2.5">
-                  <div className="flex justify-between items-center group">
-                    <label className="text-[9px] font-bold tracking-[0.25em] uppercase text-gold">Email Address</label>
-                    <span className="text-gold text-[10px] leading-none opacity-80">*</span>
-                  </div>
-                  <input
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    type="email"
-                    placeholder="you@email.com"
-                    className="w-full bg-black/30 border border-white/5 p-3.5 text-[11px] focus:outline-none focus:border-gold/30 placeholder:opacity-20 text-white"
-                  />
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center"><label>Email Address</label><span className="text-gold text-[10px]">*</span></div>
+                  <input name="email" value={formData.email} onChange={handleInputChange} required type="email" placeholder="you@email.com" />
                 </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div className="space-y-2.5">
-                  <div className="flex justify-between items-center group">
-                    <label className="text-[9px] font-bold tracking-[0.25em] uppercase text-gold">Phone Number</label>
-                    <span className="text-[8px] uppercase tracking-tighter opacity-30 font-bold">Optional</span>
-                  </div>
-                  <input
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    type="tel"
-                    placeholder="+233 XX XXX XXXX"
-                    className="w-full bg-black/30 border border-white/5 p-3.5 text-[11px] focus:outline-none focus:border-gold/30 placeholder:opacity-20 text-white"
-                  />
-                  <p className="text-[8px] opacity-30 tracking-tight font-medium">For WhatsApp event updates only.</p>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center"><label>Phone Number</label><span className="optional">Optional</span></div>
+                  <input name="phone" value={formData.phone} onChange={handleInputChange} type="tel" placeholder="+233 XX XXX XXXX" />
+                  <p className="text-[8px] opacity-20 tracking-tighter">For WhatsApp event updates only.</p>
                 </div>
-                <div className="space-y-2.5">
-                  <div className="flex justify-between items-center group">
-                    <label className="text-[9px] font-bold tracking-[0.25em] uppercase text-gold">City / Region</label>
-                    <span className="text-gold text-[10px] leading-none opacity-80">*</span>
-                  </div>
-                  <input
-                    name="city"
-                    value={formData.city}
-                    onChange={handleInputChange}
-                    required
-                    type="text"
-                    placeholder="e.g. Accra"
-                    className="w-full bg-black/30 border border-white/5 p-3.5 text-[11px] focus:outline-none focus:border-gold/30 placeholder:opacity-20 text-white"
-                  />
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center"><label>City / Region</label><span className="text-gold text-[10px]">*</span></div>
+                  <input name="city" value={formData.city} onChange={handleInputChange} required type="text" placeholder="e.g. Accra" />
                 </div>
               </div>
             </div>
 
             {/* SECTION 2: YOUR BACKGROUND */}
-            <div className="space-y-5">
-              <div className="flex items-center gap-5">
-                <div className="flex-1 h-[0.5px] bg-gold/10"></div>
-                <p className="text-[9px] font-bold tracking-[0.4em] text-white opacity-80 uppercase whitespace-nowrap">Your Background</p>
-                <div className="flex-1 h-[0.5px] bg-gold/10"></div>
+            <div className="space-y-6">
+              <div className="divider-label"><span className="text-section-label">Your Background</span></div>
+              <div className="space-y-2 col-span-full">
+                <div className="flex justify-between items-center"><label>Organisation</label><span className="text-gold text-[10px]">*</span></div>
+                <input name="organisation" value={formData.organisation} onChange={handleInputChange} required type="text" placeholder="Company, university, or agency" />
               </div>
-
-              <div className="grid grid-cols-1 gap-5">
-                <div className="space-y-2.5">
-                  <div className="flex justify-between items-center group">
-                    <label className="text-[9px] font-bold tracking-[0.25em] uppercase text-gold">Organisation</label>
-                    <span className="text-gold text-[10px] leading-none opacity-80">*</span>
-                  </div>
-                  <input
-                    name="organisation"
-                    value={formData.organisation}
-                    onChange={handleInputChange}
-                    required
-                    type="text"
-                    placeholder="Company, university, or agency"
-                    className="w-full bg-black/30 border border-white/5 p-3.5 text-[11px] focus:outline-none focus:border-gold/30 placeholder:opacity-20 text-white"
-                  />
-                </div>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center"><label>How did you hear about this event?</label></div>
+                <select name="source" className='text-white' value={formData.source} onChange={handleInputChange}>
+                  <option value="" disabled>Select one</option>
+                  <option value="LinkedIn">LinkedIn</option>
+                  <option value="WhatsApp">WhatsApp</option>
+                  <option value="Direct Invite">Direct Invite</option>
+                  <option value="Word of Mouth">Word of Mouth</option>
+                  <option value="Ninani Group Website">Ninani Group Website</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
             </div>
 
 
-            {/* SECTION 4: CONSENT */}
-            <div className="bg-black/30 border border-white/5 p-5 space-y-4">
-              <label className="flex items-start gap-4 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  className="custom-checkbox mt-1"
-                  checked={formData.consent}
-                  onChange={(e) => setFormData(prev => ({ ...prev, consent: e.target.checked }))}
-                />
-                <div className="space-y-1.5">
-                  <p className="text-[11px] font-bold tracking-wide">I agree to receive communications from The Ninani Group.</p>
+            {/* CONSENT AND SUBMIT */}
+            <div className="space-y-8 pt-4">
+              <label className="flex items-start gap-4 p-6 border border-border-green/20 bg-deep-green/30 cursor-pointer group">
+                <input type="checkbox" checked={formData.consent} onChange={(e) => setFormData(prev => ({ ...prev, consent: e.target.checked }))} />
+                <div className="space-y-2">
+                  <p className="text-[11px] font-bold tracking-wide group-hover:text-gold transition-colors">I agree to receive communications from The Ninani Group.</p>
                   <p className="text-[9px] leading-relaxed opacity-30 font-light">
-                    By registering, you consent to being contacted by email (and optionally WhatsApp if you've provided your number) about this event and future Ninani Group activities. You can unsubscribe at any time. We will never share your data with third parties outside The Ninani Group.                  </p>
+                    By registering, you consent to being contacted by email (and optionally WhatsApp) about this event and future Ninani Group activities. You can unsubscribe at any time. We will never share your data with third parties outside The Ninani Group.
+                  </p>
                 </div>
               </label>
-            </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-10 pt-2">
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full sm:w-[65%] bg-gold text-black font-bold tracking-[0.4em] uppercase py-5 rounded-none hover:bg-[#d4b980] transition-all disabled:opacity-50 disabled:cursor-wait"
-              >
-                {loading ? 'Accepting...' : 'Accept Invitation'}
-              </button>
-              <p className="text-[9px] opacity-30 leading-relaxed sm:w-[35%] text-center sm:text-left">
-                Your details are handled securely and never sold.
-              </p>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-px bg-border-green/20">
+                <button type="submit" disabled={loading} className="btn-primary sm:flex-[2] py-6 tracking-[0.3em]">
+                  {loading ? 'Processing...' : 'Accept Invitation'}
+                </button>
+                <div className="bg-panel-green sm:flex-1 p-4 sm:p-6 text-center sm:text-left flex items-center">
+                  <p className="text-[8px] opacity-30 leading-relaxed tracking-wide uppercase font-medium">
+                    Your details are handled securely and never sold.
+                  </p>
+                </div>
+              </div>
             </div>
-
           </form>
-
-          <footer className="mt-12 border-t border-white/5 pt-8 text-center">
-            <p className="text-[8px] opacity-20 leading-relaxed font-sans tracking-[0.3em] uppercase max-w-sm mx-auto">
-              Information collected solely for event management by The Ninani Group © 2026
-            </p>
-          </footer>
         </div>
       </motion.div>
-
-
     </div>
   )
 }
 
 export default App
-App
