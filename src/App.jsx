@@ -15,9 +15,6 @@ const App = () => {
     phone: '',
     city: '',
     organisation: '',
-    role: '',
-    source: '',
-    preferences: [],
     consent: false
   })
 
@@ -26,15 +23,6 @@ const App = () => {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleCheckboxChange = (preference) => {
-    setFormData(prev => {
-      const current = prev.preferences
-      if (current.includes(preference)) {
-        return { ...prev, preferences: current.filter(p => p !== preference) }
-      }
-      return { ...prev, preferences: [...current, preference] }
-    })
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -54,9 +42,6 @@ const App = () => {
           phone: formData.phone,
           city: formData.city,
           organisation: formData.organisation,
-          role: formData.role,
-          source: formData.source,
-          preferences: formData.preferences,
           consent: formData.consent
         }])
 
@@ -69,10 +54,7 @@ const App = () => {
           email: formData.email,
           phone: formData.phone,
           city: formData.city,
-          organisation: formData.organisation,
-          role: formData.role,
-          source: formData.source || 'Direct',
-          preferences: formData.preferences.join(', ') || 'None'
+          organisation: formData.organisation
         }
 
         await emailjs.send(
@@ -86,16 +68,13 @@ const App = () => {
         // We don't throw here so the user still sees their registration was successful
       }
 
-      toast.success('Registration successful! Check your email for confirmation.')
+      toast.success('Invitation accepted successfully! Check your email for confirmation.')
       setFormData({
         fullName: '',
         email: '',
         phone: '',
         city: '',
         organisation: '',
-        role: '',
-        source: '',
-        preferences: [],
         consent: false
       })
     } catch (error) {
@@ -205,7 +184,7 @@ D. A. Twum Jnr. Fellowship
                 <div className="w-7 h-7 border border-gold/30 flex items-center justify-center transition-all group-hover:border-gold">
                   <div className="w-2 h-2 rotate-45 border border-gold/60 transition-colors"></div>
                 </div>
-                <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 group-hover:opacity-60 transition-opacity">Accra, Ghana</p>
+                <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 group-hover:opacity-60 transition-opacity">Labadi Beach Hotel</p>
               </div>
               <div className="flex items-center gap-6 group">
                 <div className="w-7 h-7 border border-gold/30 flex items-center justify-center transition-all group-hover:border-gold">
@@ -261,7 +240,7 @@ D. A. Twum Jnr. Fellowship
 
           <div className="flex items-center justify-end gap-3 mb-8">
             <div className="flex-1 h-[0.5px] bg-gold opacity-20"></div>
-            <p className="text-[9px] font-bold tracking-[0.4em] text-gold uppercase whitespace-nowrap">Register your attendance</p>
+            <p className="text-[9px] font-bold tracking-[0.4em] text-gold uppercase whitespace-nowrap">RSVP</p>
           </div>
 
           <h2 className="text-5xl md:text-6xl font-serif mb-2 leading-tight text-white">
@@ -356,7 +335,7 @@ D. A. Twum Jnr. Fellowship
                 <div className="flex-1 h-[0.5px] bg-gold/10"></div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 gap-5">
                 <div className="space-y-2.5">
                   <div className="flex justify-between items-center group">
                     <label className="text-[9px] font-bold tracking-[0.25em] uppercase text-gold">Organisation</label>
@@ -372,98 +351,9 @@ D. A. Twum Jnr. Fellowship
                     className="w-full bg-black/30 border border-white/5 p-3.5 text-[11px] focus:outline-none focus:border-gold/30 placeholder:opacity-20 text-white"
                   />
                 </div>
-                <div className="space-y-2.5">
-                  <div className="flex justify-between items-center group">
-                    <label className="text-[9px] font-bold tracking-[0.25em] uppercase text-gold">Your Role</label>
-                    <span className="text-gold text-[10px] leading-none opacity-80">*</span>
-                  </div>
-                  <select
-                    name="role"
-                    value={formData.role}
-                    onChange={handleInputChange}
-                    required
-                    className="custom-select"
-                  >
-                    <option value="" disabled>Select your role</option>
-                    <option value="student">Student</option>
-                    <option value="professional">Professional</option>
-                    <option value="agency">Agency</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="space-y-2.5">
-                <div className="flex justify-between items-center">
-                  <label className="text-[9px] font-bold tracking-[0.25em] uppercase text-gold">How did you hear about this event?</label>
-                </div>
-                <select
-                  name="source"
-                  value={formData.source}
-                  onChange={handleInputChange}
-                  className="custom-select"
-                >
-                  <option value="" disabled>Select one</option>
-                  <option value="social">Social Media</option>
-                  <option value="word">Word of Mouth</option>
-                  <option value="email">Email</option>
-                </select>
               </div>
             </div>
 
-            {/* SECTION 3: STAY CONNECTED */}
-            <div className="space-y-5">
-              <div className="flex items-center gap-5">
-                <div className="flex-1 h-[0.5px] bg-gold/10"></div>
-                <p className="text-[9px] font-bold tracking-[0.4em] text-white opacity-80 uppercase whitespace-nowrap">Stay Connected</p>
-                <div className="flex-1 h-[0.5px] bg-gold/10"></div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <p className="text-[9px] font-bold tracking-[0.25em] uppercase text-gold">What would you like to hear from us?</p>
-                  <span className="text-[8px] opacity-40 lowercase italic font-normal">Select all that apply</span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  <label className="flex items-center gap-4 bg-black/20 border border-white/5 p-3.5 cursor-pointer hover:bg-black/30 transition-all">
-                    <input
-                      type="checkbox"
-                      className="custom-checkbox"
-                      checked={formData.preferences.includes('news')}
-                      onChange={() => handleCheckboxChange('news')}
-                    />
-                    <span className="text-[10px] font-medium opacity-70">Fellowship news & cohort updates</span>
-                  </label>
-                  <label className="flex items-center gap-4 bg-black/20 border border-white/5 p-3.5 cursor-pointer hover:bg-black/30 transition-all">
-                    <input
-                      type="checkbox"
-                      className="custom-checkbox"
-                      checked={formData.preferences.includes('events')}
-                      onChange={() => handleCheckboxChange('events')}
-                    />
-                    <span className="text-[10px] font-medium opacity-70">Future industry events</span>
-                  </label>
-                  <label className="flex items-center gap-4 bg-black/20 border border-white/5 p-3.5 cursor-pointer hover:bg-black/30 transition-all">
-                    <input
-                      type="checkbox"
-                      className="custom-checkbox"
-                      checked={formData.preferences.includes('mentorship')}
-                      onChange={() => handleCheckboxChange('mentorship')}
-                    />
-                    <span className="text-[10px] font-medium opacity-70">Mentorship opportunities</span>
-                  </label>
-                  <label className="flex items-center gap-4 bg-black/20 border border-white/5 p-3.5 cursor-pointer hover:bg-black/30 transition-all">
-                    <input
-                      type="checkbox"
-                      className="custom-checkbox"
-                      checked={formData.preferences.includes('partnership')}
-                      onChange={() => handleCheckboxChange('partnership')}
-                    />
-                    <span className="text-[10px] font-medium opacity-70">Partnership & sponsorship</span>
-                  </label>
-                </div>
-              </div>
-            </div>
 
             {/* SECTION 4: CONSENT */}
             <div className="bg-black/30 border border-white/5 p-5 space-y-4">
@@ -488,7 +378,7 @@ D. A. Twum Jnr. Fellowship
                 disabled={loading}
                 className="w-full sm:w-[65%] bg-gold text-black font-bold tracking-[0.4em] uppercase py-5 rounded-none hover:bg-[#d4b980] transition-all disabled:opacity-50 disabled:cursor-wait"
               >
-                {loading ? 'Registering...' : 'Complete Registration'}
+                {loading ? 'Accepting...' : 'Accept Invitation'}
               </button>
               <p className="text-[9px] opacity-30 leading-relaxed sm:w-[35%] text-center sm:text-left">
                 Your details are handled securely and never sold.
