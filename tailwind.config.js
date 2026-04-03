@@ -8,15 +8,23 @@ export default {
   theme: {
     extend: {
       colors: {
-        'gold': '#bfa36a',
-        'dark-green': '#002b1b',
+        'deep-green': '#0B1A12',
+        'panel-green': '#162A1F',
+        'surface-green': '#1E3628',
+        'muted-green': '#2A4A38',
+        'border-green': '#2E5240',
+        'gold': '#C9A84C',
+        'gold-light': '#D4B85E',
+        'gold-muted': '#A18A42',
+        'cream': '#F0EBE0',
+        'cream-muted': '#C8C2B4',
       },
       fontFamily: {
-
+        display: ['"Funnel Display"', 'serif'],
+        body: ['"Geologica"', 'sans-serif'],
+        ui: ['"Lexend"', 'sans-serif'],
         handwriting: ['"Great Vibes"', 'cursive'],
-        playfair: ['"Playfair", serif'],
-        openSans: ['"Open Sans", sans-serif']
-
+        serif: ['"Playfair Display"', 'serif'],
       },
       backgroundImage: {
         'custom-gradient': 'linear-gradient(94.06deg, #CE1919 -1.21%, #FF5252 58.66%, #FFA3A3 116.84%)',

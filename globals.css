@@ -1,12 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════
-   D.A. TWUM JNR. FELLOWSHIP — Design System (V3 Adapted)
+   D.A. TWUM JNR. FELLOWSHIP — Design System
+   Stack: Next.js · Tailwind CSS v4 · TypeScript
+   Fonts: Funnel Display · Geologica · Lexend (Google Fonts)
    ═══════════════════════════════════════════════════════════════ */
 
-:root {
+/* ── THEME TOKENS ─────────────────────────────────────────────
+   Tailwind v4 uses @theme to define design tokens directly in CSS.
+   These become available as utility classes automatically.
+   ──────────────────────────────────────────────────────────── */
+
+@theme {
   /* ── Colour Palette ── */
   --color-deep-green: #0B1A12;
   --color-panel-green: #162A1F;
@@ -26,15 +31,28 @@
   --color-error: #E85C5C;
   --color-success: #5CB878;
 
+  /* ── Typography: Font Families ──
+     Loaded via next/font/google in layout.tsx.
+     CSS variables are set on <html> by Next.js.        */
+  --font-display: var(--font-funnel-display), "Georgia", serif;
+  --font-body: var(--font-geologica), "Segoe UI", system-ui, sans-serif;
+  --font-ui: var(--font-lexend), "Inter", system-ui, sans-serif;
+
   /* ── Typography: Sizes ── */
-  --text-headline-xl: 4rem;
-  --text-headline-lg: 2.75rem;
-  --text-headline-md: 2rem;
-  --text-subhead: 1.5rem;
-  --text-body: 1rem;
-  --text-body-sm: 0.875rem;
-  --text-caption: 0.75rem;
-  --text-label: 0.6875rem;
+  --text-headline-xl: 4rem;     /* 64px — hero title desktop  */
+  --text-headline-lg: 2.75rem;  /* 44px — hero title tablet   */
+  --text-headline-md: 2rem;     /* 32px — hero title mobile   */
+  --text-subhead: 1.5rem;       /* 24px — form header         */
+  --text-body: 1rem;            /* 16px — body copy           */
+  --text-body-sm: 0.875rem;     /* 14px — secondary copy      */
+  --text-caption: 0.75rem;      /* 12px — labels, fine print  */
+  --text-label: 0.6875rem;      /* 11px — form section labels */
+
+  /* ── Spacing Scale ── */
+  --spacing-section: 4rem;
+  --spacing-block: 2rem;
+  --spacing-element: 1rem;
+  --spacing-tight: 0.5rem;
 
   /* ── Layout ── */
   --max-width-page: 1440px;
@@ -73,7 +91,7 @@ html {
 }
 
 body {
-  font-family: 'Geologica', "Segoe UI", system-ui, sans-serif;
+  font-family: var(--font-body);
   background-color: var(--color-deep-green);
   color: var(--color-cream);
   line-height: 1.6;
@@ -84,19 +102,21 @@ body {
 /* ── TYPOGRAPHY ───────────────────────────────────────────── */
 
 h1, h2, h3 {
-  font-family: 'Funnel Display', "Georgia", serif;
+  font-family: var(--font-display);
   line-height: 1.1;
   letter-spacing: -0.01em;
   color: var(--color-cream);
 }
 
+/* Italic gold accent — for "Fellowship" and "invited" */
 .text-accent-italic {
   font-style: italic;
   color: var(--color-gold);
 }
 
+/* Spaced uppercase labels — "YOUR DETAILS", "LAUNCH EVENT" */
 .text-label {
-  font-family: 'Lexend', "Inter", sans-serif;
+  font-family: var(--font-ui);
   font-size: var(--text-label);
   font-weight: 500;
   letter-spacing: 0.18em;
@@ -104,8 +124,9 @@ h1, h2, h3 {
   color: var(--color-gold);
 }
 
+/* Section divider labels — "STAY CONNECTED" */
 .text-section-label {
-  font-family: 'Lexend', "Inter", sans-serif;
+  font-family: var(--font-ui);
   font-size: var(--text-caption);
   font-weight: 500;
   letter-spacing: 0.22em;
@@ -114,16 +135,18 @@ h1, h2, h3 {
   text-align: center;
 }
 
+/* Body / description copy */
 .text-body {
-  font-family: 'Geologica', sans-serif;
+  font-family: var(--font-body);
   font-size: var(--text-body-sm);
   font-weight: 300;
   line-height: 1.7;
   color: var(--color-cream-faint);
 }
 
+/* Fine print — privacy, disclaimers */
 .text-fine {
-  font-family: 'Geologica', sans-serif;
+  font-family: var(--font-body);
   font-size: var(--text-caption);
   font-weight: 300;
   line-height: 1.5;
@@ -132,13 +155,14 @@ h1, h2, h3 {
 
 /* ── FORM ELEMENTS ────────────────────────────────────────── */
 
+/* Input fields */
 input[type="text"],
 input[type="email"],
 input[type="tel"],
 select {
   width: 100%;
   padding: 0.75rem 1rem;
-  font-family: 'Geologica', sans-serif;
+  font-family: var(--font-body);
   font-size: var(--text-body-sm);
   font-weight: 300;
   color: var(--color-cream);
@@ -162,6 +186,14 @@ select:focus {
   box-shadow: 0 0 0 2px var(--color-gold-faint);
 }
 
+/* Invalid state */
+input:invalid:not(:placeholder-shown),
+input[aria-invalid="true"] {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 2px rgba(232, 92, 92, 0.12);
+}
+
+/* Select dropdown arrow override */
 select {
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23C9A84C' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -170,9 +202,10 @@ select {
   padding-right: 2.5rem;
 }
 
+/* Form field labels */
 label {
   display: block;
-  font-family: 'Lexend', sans-serif;
+  font-family: var(--font-ui);
   font-size: var(--text-label);
   font-weight: 500;
   letter-spacing: 0.14em;
@@ -186,6 +219,16 @@ label .required {
   margin-left: 0.25rem;
 }
 
+label .optional {
+  font-weight: 300;
+  font-size: var(--text-caption);
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+  color: var(--color-cream-muted);
+  opacity: 0.6;
+}
+
+/* Checkboxes */
 input[type="checkbox"] {
   appearance: none;
   width: 1.125rem;
@@ -206,6 +249,10 @@ input[type="checkbox"]:checked {
   background-position: center;
 }
 
+input[type="checkbox"]:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-gold-faint);
+}
+
 /* ── PRIMARY CTA BUTTON ───────────────────────────────────── */
 
 .btn-primary {
@@ -214,7 +261,7 @@ input[type="checkbox"]:checked {
   justify-content: center;
   width: 100%;
   padding: 1rem 2rem;
-  font-family: 'Lexend', sans-serif;
+  font-family: var(--font-ui);
   font-size: var(--text-body-sm);
   font-weight: 600;
   letter-spacing: 0.16em;
@@ -237,14 +284,22 @@ input[type="checkbox"]:checked {
   transform: translateY(0);
 }
 
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 /* ── DECORATIVE ELEMENTS ──────────────────────────────────── */
 
+/* Gold pill badge — "LAUNCH EVENT" */
 .badge-pill {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.375rem 1rem;
-  font-family: 'Lexend', sans-serif;
+  font-family: var(--font-ui);
   font-size: var(--text-label);
   font-weight: 500;
   letter-spacing: 0.18em;
@@ -261,12 +316,13 @@ input[type="checkbox"]:checked {
   background-color: var(--color-gold);
 }
 
+/* Timeline-style detail items — date, location, organiser */
 .detail-item {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 0;
-  font-family: 'Geologica', sans-serif;
+  font-family: var(--font-body);
   font-size: var(--text-body-sm);
   font-weight: 300;
   color: var(--color-cream-faint);
@@ -274,6 +330,12 @@ input[type="checkbox"]:checked {
   padding-left: 1rem;
 }
 
+.detail-item .icon {
+  color: var(--color-gold-muted);
+  flex-shrink: 0;
+}
+
+/* Section divider with label */
 .divider-label {
   display: flex;
   align-items: center;
@@ -289,16 +351,7 @@ input[type="checkbox"]:checked {
   background: var(--color-border-green);
 }
 
-/* ── UTILITIES ────────────────────────────────────────────── */
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+/* ── SCROLLBAR ────────────────────────────────────────────── */
 
 ::-webkit-scrollbar {
   width: 6px;
@@ -311,4 +364,35 @@ input[type="checkbox"]:checked {
 ::-webkit-scrollbar-thumb {
   background: var(--color-muted-green);
   border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-green);
+}
+
+/* ── FOCUS VISIBLE — Accessibility ────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* ── SELECTION COLOUR ─────────────────────────────────────── */
+
+::selection {
+  background-color: var(--color-gold);
+  color: var(--color-deep-green);
+}
+
+/* ── REDUCED MOTION ───────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
