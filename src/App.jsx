@@ -126,7 +126,7 @@ const App = () => {
   }, [])
 
   return (
-    <div className={`flex flex-col md:flex-row h-full min-h-screen md:h-screen bg-black text-white font-sans overflow-y-auto md:overflow-hidden relative no-scrollbar`}>
+    <div className={`flex flex-col md:flex-row h-full min-h-screen md:h-screen bg-black text-white font-sans overflow-y-auto overflow-x-hidden md:overflow-hidden relative no-scrollbar`}>
       {/* Mobile Drag Handle - Middle Right */}
       {!isFormOpen && (
         <motion.button
@@ -163,7 +163,7 @@ const App = () => {
         {/* Content Container */}
         <div className="relative h-full flex flex-col justify-between p-10 md:p-14 lg:p-20 z-10 md:overflow-hidden">
           {/* Top Branding */}
-          <div className="space-y-1 md:mb-14 mb-20">
+          <div className="space-y-1 md:mb-14 mb-16">
             <p className="text-[14px] md:text-[11px] tracking-[0.1em] font-medium text-white opacity-90 font-serif">
               D.A. Twum Jnr. Fellowship
             </p>
@@ -173,14 +173,14 @@ const App = () => {
           </div>
 
           {/* Main Hero Content */}
-          <div className="max-w-xl py-14 md:py-4">
+          <div className="max-w-xl py-12 md:py-4">
             <div className="flex items-center gap-4 mb-10 translate-x-[-4px]">
               <div className="w-10 h-[0.5px] bg-gold opacity-60"></div>
               <p className="text-[9px] font-bold tracking-[0.5em] text-gold uppercase">Launch Event</p>
               <div className="w-1 h-1 rounded-full bg-gold opacity-80"></div>
             </div>
 
-            <h1 className="text-7xl md:text-5xl lg:text-6xl font-serif tracking-tighter mb-8 leading-[0.85] flex flex-col">
+            <h1 className="text-7xl md:text-5xl lg:text-6xl font-serif tracking-tighter mb-4 leading-[0.85] flex flex-col">
               <span className="text-white">The</span>
               <span className="italic text-gold py-1">Fellowship</span>
               <span className="text-white relative inline-block">
@@ -188,7 +188,7 @@ const App = () => {
               </span>
             </h1>
 
-            <p className="text-xs md:text-sm leading-relaxed opacity-40 mb-6 max-w-sm font-sans font-light tracking-wide">
+            <p className="text-xs md:text-sm leading-relaxed opacity-40 mb-5 max-w-sm font-sans font-light tracking-wide">
               Join us for the official launch of the D.A. Twum Jnr. Fellowship — an evening honouring a pioneer of Ghanaian advertising and marking the beginning of a new chapter for creative talent in Ghana.
             </p>
 
@@ -241,7 +241,7 @@ const App = () => {
           x: isMobile ? (isFormOpen ? 0 : '100%') : 0
         }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="w-full md:w-1/2 bg-dark-green h-full overflow-y-auto no-scrollbar p-6 md:p-10 lg:p-12 flex flex-col justify-start fixed md:static top-0 right-0 z-50 md:z-auto shadow-[-20px_0_40px_rgba(0,0,0,0.5)] md:shadow-none"
+        className="w-full md:w-1/2 bg-dark-green h-full overflow-y-auto overflow-x-hidden no-scrollbar p-6 md:p-10 lg:p-12 flex flex-col justify-start fixed md:static top-0 right-0 z-50 md:z-auto shadow-[-20px_0_40px_rgba(0,0,0,0.5)] md:shadow-none"
       >
         {/* Close Button - Mobile Only */}
         <button
