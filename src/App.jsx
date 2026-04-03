@@ -3,12 +3,59 @@ import { supabase } from './lib/supabaseClient'
 import logo from './assets/main_logo.png'
 import { toast } from 'react-toastify'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Calendar, MapPin, Clock, ChevronDown } from 'lucide-react'
+import { X, Calendar, MapPin, Clock, Info } from 'lucide-react'
 import emailjs from '@emailjs/browser'
+
+// ── LEGAL MODAL COMPONENT ──────────────────────────────────────────
+const LegalModal = ({ title, content, isOpen, onClose }) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-black/90 backdrop-blur-sm"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+            className="w-full max-w-2xl bg-panel-green border border-border-green max-h-[80vh] flex flex-col relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="p-6 border-b border-border-green/20 flex justify-between items-center">
+              <h3 className="text-xl font-display text-gold tracking-tight">{title}</h3>
+              <button
+                onClick={onClose}
+                className="text-gold-muted hover:text-gold transition-colors p-2"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Content Container */}
+            <div className="p-8 overflow-y-auto no-scrollbar modal-content">
+              {content}
+            </div>
+
+            {/* Footer Overlay */}
+            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-panel-green to-transparent pointer-events-none"></div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
 
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [isToSOpen, setIsToSOpen] = useState(false)
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -24,12 +71,11 @@ const App = () => {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (!formData.consent) {
-      toast.error('Please agree to the communications consent.')
+      toast.error('Please agree to the terms and privacy policy.')
       return
     }
 
@@ -105,7 +151,7 @@ const App = () => {
       <div className="w-full md:w-1/2 min-h-screen relative flex flex-col justify-between overflow-hidden">
         {/* Cinematic Backdrop */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-black/80 z-10"></div>
+          <div className="absolute inset-0 bg-black/70 z-10"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-deep-green via-transparent to-transparent z-10"></div>
           <img
             src="/assets/images/fellowship-bg.png"
@@ -128,7 +174,6 @@ const App = () => {
                 <div className="absolute inset-0 bg-gold/20 rounded-full blur-xl animate-pulse"></div>
                 <img src={logo} alt="Fellowship Logo" className="w-full h-full object-contain relative z-10 drop-shadow-2xl" />
               </motion.div>
-
             </div>
 
             {/* Main Hero Content */}
@@ -148,13 +193,19 @@ const App = () => {
           </div>
           <div className="mt-16 md:mt-0">
             <div className="w-12 h-[1px] bg-gold/30 mb-4"></div>
-            <p className="text-fine opacity-20 uppercase tracking-[0.2em]">Innovating with purpose.</p>
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
+              <p className="text-fine opacity-20 uppercase tracking-[0.2em]">Innovating with purpose.</p>
+              <div className="flex gap-6">
+                <button onClick={() => setIsToSOpen(true)} className="text-[10px] opacity-30 hover:opacity-100 hover:text-gold transition-all uppercase tracking-widest font-medium">Terms & Conditions</button>
+                <button onClick={() => setIsPrivacyOpen(true)} className="text-[10px] opacity-30 hover:opacity-100 hover:text-gold transition-all uppercase tracking-widest font-medium">Privacy Policy</button>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Mobile RSVP Trigger */}
         {isMobile && !isFormOpen && (
-          <motion.button initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} onClick={() => setIsFormOpen(true)} className="fixed bottom-8 left-8 right-8 z-50 btn-primary shadow-2xl">
+          <motion.button initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} onClick={() => setIsFormOpen(true)} className="fixed bottom-8 left-0 right-0 z-50 btn-primary shadow-2xl">
             Accept Invitation
           </motion.button>
         )}
@@ -169,7 +220,7 @@ const App = () => {
       >
         {/* Mobile Close */}
         {isMobile && (
-          <button onClick={() => setIsFormOpen(false)} className="absolute top-8 right-8 text-gold-muted hover:text-gold z-50"><X size={24} /></button>
+          <button onClick={() => setIsFormOpen(false)} className="absolute top-3 right-8 text-gold-muted hover:text-gold z-50"><X size={24} /></button>
         )}
 
         <div className="max-w-2xl mx-auto w-full relative pt-4">
@@ -179,11 +230,9 @@ const App = () => {
           </div>
 
           <h2 className="text-5xl md:text-6xl font-display mb-3 leading-tight">
-            You're <span className="text-accent-italic text-gold italic">invited.</span>
+            You're <span className="text-gold italic">invited.</span>
           </h2>
-          <p className="text-[11px] opacity-40 mb-10 font-body tracking-wide">
-            Fill in your details below. Takes less than 2 minutes.
-          </p>
+          <p className="text-[11px] opacity-40 mb-10 font-body tracking-wide">Confirm your attendance - it only takes a moment.</p>
 
           <form onSubmit={handleSubmit} className="space-y-12">
 
@@ -192,20 +241,20 @@ const App = () => {
               <div className="divider-label"><span className="text-section-label">Your Details</span></div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center"><label>Full Name</label><span className="text-gold text-[10px]">*</span></div>
+                  <div className="flex items-start gap-1.5"><label>Full Name</label><span className="text-gold text-[10px] mt-0.5">*</span></div>
                   <input name="fullName" value={formData.fullName} onChange={handleInputChange} required type="text" placeholder="Your full name" />
                 </div>
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center"><label>Email Address</label><span className="text-gold text-[10px]">*</span></div>
+                  <div className="flex items-start gap-1.5"><label>Email Address</label><span className="text-gold text-[10px] mt-0.5">*</span></div>
                   <input name="email" value={formData.email} onChange={handleInputChange} required type="email" placeholder="you@email.com" />
                 </div>
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center"><label>Phone Number</label><span className="optional">Optional</span></div>
+                  <div className="flex items-start gap-1.5"><label>Phone Number</label><span className="optional opacity-40 text-[9px] mt-0.5">(Optional)</span></div>
                   <input name="phone" value={formData.phone} onChange={handleInputChange} type="tel" placeholder="+233 XX XXX XXXX" />
                   <p className="text-[8px] opacity-20 tracking-tighter">For WhatsApp event updates only.</p>
                 </div>
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center"><label>City / Region</label><span className="text-gold text-[10px]">*</span></div>
+                  <div className="flex items-start gap-1.5"><label>City / Region</label><span className="text-gold text-[10px] mt-0.5">*</span></div>
                   <input name="city" value={formData.city} onChange={handleInputChange} required type="text" placeholder="e.g. Accra" />
                 </div>
               </div>
@@ -215,7 +264,7 @@ const App = () => {
             <div className="space-y-6">
               <div className="divider-label"><span className="text-section-label">Your Background</span></div>
               <div className="space-y-2 col-span-full">
-                <div className="flex justify-between items-center"><label>Organisation</label><span className="text-gold text-[10px]">*</span></div>
+                <div className="flex items-start gap-1.5"><label>Organisation</label><span className="text-gold text-[10px] mt-0.5">*</span></div>
                 <input name="organisation" value={formData.organisation} onChange={handleInputChange} required type="text" placeholder="Company, university, or agency" />
               </div>
               <div className="space-y-2">
@@ -232,15 +281,16 @@ const App = () => {
               </div>
             </div>
 
-
             {/* CONSENT AND SUBMIT */}
             <div className="space-y-8 pt-4">
               <label className="flex items-start gap-4 p-6 border border-border-green/20 bg-deep-green/30 cursor-pointer group">
                 <input type="checkbox" checked={formData.consent} onChange={(e) => setFormData(prev => ({ ...prev, consent: e.target.checked }))} />
                 <div className="space-y-2">
-                  <p className="text-[11px] font-bold tracking-wide group-hover:text-gold transition-colors">I agree to receive communications from The Ninani Group.</p>
+                  <p className="text-[11px] font-bold tracking-wide group-hover:text-gold transition-colors">
+                    I agree to the <span className="underline decoration-gold/30 hover:text-gold transition-colors" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsToSOpen(true); }}>Terms of Service</span> and <span className="underline decoration-gold/30 hover:text-gold transition-colors" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsPrivacyOpen(true); }}>Privacy Policy</span>.
+                  </p>
                   <p className="text-[9px] leading-relaxed opacity-30 font-light">
-                    By registering, you consent to being contacted by email (and optionally WhatsApp) about this event and future Ninani Group activities. You can unsubscribe at any time. We will never share your data with third parties outside The Ninani Group.
+                    By registering, you consent to being contacted by email (and optionally WhatsApp) about this event and future Fellowship activities. You can unsubscribe at any time.
                   </p>
                 </div>
               </label>
@@ -259,6 +309,59 @@ const App = () => {
           </form>
         </div>
       </motion.div>
+
+      {/* ── MODALS ────────── */}
+      <LegalModal
+        title="Terms of Service"
+        isOpen={isToSOpen}
+        onClose={() => setIsToSOpen(false)}
+        content={(
+          <div className="space-y-6 text-white/70 font-body text-sm leading-relaxed">
+            <section>
+              <h4 className="text-gold font-display mb-2 uppercase tracking-widest text-[10px]">1. Acceptance</h4>
+              <p>By registering for the D.A. Twum Jnr. Fellowship launch, you agree to these Terms of Service. This is a private event; attendance is subject to verification.</p>
+            </section>
+            <section>
+              <h4 className="text-gold font-display mb-2 uppercase tracking-widest text-[10px]">2. Event Access</h4>
+              <p>Entry is restricted to registered guests. The Fellowship reserves the right to refuse entry or remove individuals from the premises if conduct is deemed inappropriate.</p>
+            </section>
+            <section>
+              <h4 className="text-gold font-display mb-2 uppercase tracking-widest text-[10px]">3. Intellectual Property</h4>
+              <p>All branding, presentations, and creative assets showcased during the launch are the property of the Ninani Group and the D.A. Twum Jnr. Fellowship.</p>
+            </section>
+            <section>
+              <h4 className="text-gold font-display mb-2 uppercase tracking-widest text-[10px]">4. Liability</h4>
+              <p>The organisers are not liable for any personal property loss or injury sustained during the event within the venue premises.</p>
+            </section>
+          </div>
+        )}
+      />
+
+      <LegalModal
+        title="Privacy Policy"
+        isOpen={isPrivacyOpen}
+        onClose={() => setIsPrivacyOpen(false)}
+        content={(
+          <div className="space-y-6 text-white/70 font-body text-sm leading-relaxed">
+            <section>
+              <h4 className="text-gold font-display mb-2 uppercase tracking-widest text-[10px]">1. Data Collection</h4>
+              <p>We collect your name, email, phone, and professional affiliation solely to manage event registration and Fellowship communications.</p>
+            </section>
+            <section>
+              <h4 className="text-gold font-display mb-2 uppercase tracking-widest text-[10px]">2. Use of Information</h4>
+              <p>Your data will be used to send event tickets, updates, and occasional information about future Fellowship Cohorts. We do not sell data to third parties.</p>
+            </section>
+            <section>
+              <h4 className="text-gold font-display mb-2 uppercase tracking-widest text-[10px]">3. Communication</h4>
+              <p>If you provided a WhatsApp number, it will be used only for critical event updates (location changes, timing) and will never be shared in public groups.</p>
+            </section>
+            <section>
+              <h4 className="text-gold font-display mb-2 uppercase tracking-widest text-[10px]">4. Your Rights</h4>
+              <p>You may request the deletion of your data at any time by contacting the Fellowship coordination team.</p>
+            </section>
+          </div>
+        )}
+      />
     </div>
   )
 }
