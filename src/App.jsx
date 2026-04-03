@@ -163,32 +163,33 @@ const App = () => {
         {/* Content Container */}
         <div className="relative h-full flex flex-col justify-between p-10 md:p-14 lg:p-20 z-10 md:overflow-hidden">
           {/* Top Branding */}
-          <div className="space-y-1 md:mb-14 mb-16">
+          {/* <div className="space-y-1 md:mb-14 mb-16">
             <p className="text-[14px] md:text-[11px] tracking-[0.1em] font-medium text-white opacity-90 font-serif">
-              D.A. Twum Jnr. Fellowship
+              The 
+D. A. Twum Jnr. Fellowship
             </p>
             <p className="text-[12px] md:text-[9px] tracking-[0.35em] font-bold text-gold uppercase opacity-80">
               The Ninani Group · Ghana
             </p>
-          </div>
+          </div> */}
 
           {/* Main Hero Content */}
           <div className="max-w-xl py-12 md:py-4">
-            <div className="flex items-center gap-4 mb-10 translate-x-[-4px]">
+            {/* <div className="flex items-center gap-4 mb-10 translate-x-[-4px]">
               <div className="w-10 h-[0.5px] bg-gold opacity-60"></div>
               <p className="text-[9px] font-bold tracking-[0.5em] text-gold uppercase">Launch Event</p>
               <div className="w-1 h-1 rounded-full bg-gold opacity-80"></div>
-            </div>
+            </div> */}
 
-            <h1 className="text-7xl md:text-5xl lg:text-6xl font-serif tracking-tighter mb-4 leading-[0.85] flex flex-col">
+            <h1 className="text-6xl md:text-5xl lg:text-6xl font-serif tracking-tighter mb-10 leading-[0.85] flex flex-col">
               <span className="text-white">The</span>
-              <span className="italic text-gold py-1">Fellowship</span>
+              <span className="italic text-gold py-1">D. A. Twum Jnr. Fellowship</span>
               <span className="text-white relative inline-block">
-                Launch.
+                Launch Event.
               </span>
             </h1>
 
-            <p className="text-xs md:text-sm leading-relaxed opacity-40 mb-5 max-w-sm font-sans font-light tracking-wide">
+            <p className="text-xs md:text-sm leading-relaxed opacity-40 mb-10 max-w-sm font-sans font-light tracking-wide">
               Join us for the official launch of the D.A. Twum Jnr. Fellowship — an evening honouring a pioneer of Ghanaian advertising and marking the beginning of a new chapter for creative talent in Ghana.
             </p>
 
@@ -198,7 +199,7 @@ const App = () => {
                 <div className="w-7 h-7 border border-gold/30 flex items-center justify-center transition-all group-hover:border-gold">
                   <div className="w-1 h-1 rounded-full bg-gold/50 shadow-[0_0_6px_#bfa36a]"></div>
                 </div>
-                <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 group-hover:opacity-60 transition-opacity">2026 · Date to be confirmed</p>
+                <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40 group-hover:opacity-60 transition-opacity"> 9th April 2026 at 15:30 GMT</p>
               </div>
               <div className="flex items-center gap-6 group">
                 <div className="w-7 h-7 border border-gold/30 flex items-center justify-center transition-all group-hover:border-gold">
@@ -216,7 +217,7 @@ const App = () => {
           </div>
 
           {/* Left Panel Footer - Minimalist Privacy */}
-          <div className="mt-auto pt-5">
+          <div className="mt-auto pt-10">
             <div className="w-full h-[0.5px] bg-[#858483] opacity-60 mb-2"></div>
             <p className="text-[8px] opacity-20 leading-relaxed font-sans tracking-[0.1em] text-center md:text-left uppercase">
               Your information is collected solely for event management and agreed communications. You may unsubscribe at any time.
