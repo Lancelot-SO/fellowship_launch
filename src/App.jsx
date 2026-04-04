@@ -60,7 +60,6 @@ const App = () => {
     fullName: '',
     email: '',
     phone: '',
-    city: '',
     organisation: '',
     source: '',
     consent: false
@@ -87,7 +86,6 @@ const App = () => {
           full_name: formData.fullName,
           email: formData.email,
           phone: formData.phone,
-          city: formData.city,
           organisation: formData.organisation,
           source: formData.source,
           consent: formData.consent
@@ -101,7 +99,6 @@ const App = () => {
           full_name: formData.fullName,
           email: formData.email,
           phone: formData.phone,
-          city: formData.city,
           organisation: formData.organisation
         }
         await emailjs.send(
@@ -119,7 +116,6 @@ const App = () => {
         fullName: '',
         email: '',
         phone: '',
-        city: '',
         organisation: '',
         source: '',
         consent: false
@@ -252,10 +248,6 @@ const App = () => {
                   <div className="flex items-start gap-1.5"><label>Phone Number</label><span className="optional opacity-40 text-[9px] mt-0.5">(Optional)</span></div>
                   <input name="phone" value={formData.phone} onChange={handleInputChange} type="tel" placeholder="+233 XX XXX XXXX" />
                   <p className="text-[8px] opacity-20 tracking-tighter">For WhatsApp event updates only.</p>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-start gap-1.5"><label>City / Region</label><span className="text-gold text-[10px] mt-0.5">*</span></div>
-                  <input name="city" value={formData.city} onChange={handleInputChange} required type="text" placeholder="e.g. Accra" />
                 </div>
               </div>
             </div>
