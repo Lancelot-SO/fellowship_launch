@@ -183,7 +183,7 @@ const App = () => {
                 The <span className="italic text-gold">Fellowship</span> <br />
                 <span className="opacity-90">Begins.</span>
               </h1>
-              <p className="text-body max-w-sm mb-12 text-white">Join us for the official launch of the D.A. Twum Jnr. Fellowship — an evening honouring a pioneer, unveiling the story behind the vision, and opening a new chapter for creative talent.</p>
+              <p className="text-body max-w-sm mb-12 text-white">Join us for the official launch of the D.A. Twum Jnr. Fellowship — an evening honouring a pioneer, featuring the launch of a book written in his honour, and opening a new chapter for creative talent.</p>
               <div className="space-y-4 text-white">
                 <div className="detail-item"><Calendar size={14} className="icon" /><span>9th April 2026</span></div>
                 <div className="detail-item"><Clock size={14} className="icon" /><span>15:30 GMT</span></div>
