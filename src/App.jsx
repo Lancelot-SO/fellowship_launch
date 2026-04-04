@@ -86,6 +86,7 @@ const App = () => {
           full_name: formData.fullName,
           email: formData.email,
           phone: formData.phone,
+          city: 'N/A',
           organisation: formData.organisation,
           source: formData.source,
           consent: formData.consent
