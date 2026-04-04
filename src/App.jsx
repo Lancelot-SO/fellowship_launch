@@ -97,8 +97,10 @@ const App = () => {
       // Send Confirmation Email
       try {
         const templateParams = {
-          full_name: formData.fullName,
-          email: formData.email,
+          from_name: 'D.A. TWUM FELLOWSHIP',
+          to_name: formData.fullName,
+          to_email: formData.email,
+          reply_to: 'boltedughana@gmail.com',
           phone: formData.phone,
           organisation: formData.organisation
         }
@@ -220,8 +222,8 @@ const App = () => {
           <button onClick={() => setIsFormOpen(false)} className="absolute top-3 right-8 text-gold-muted hover:text-gold z-50"><X size={24} /></button>
         )}
 
-        <div className="max-w-2xl mx-auto w-full relative pt-2">
-          <div className="flex items-center justify-end gap-3 mb-5">
+        <div className="max-w-2xl mx-auto w-full relative pt-2 md:pt-0">
+          <div className="flex items-center justify-end gap-3 mb-5 md:mb-3">
             <div className="flex-1 h-[1px] bg-gold opacity-10"></div>
             <p className="text-xs font-bold tracking-[0.4em] text-gold uppercase whitespace-nowrap">RSVP</p>
           </div>
@@ -229,7 +231,7 @@ const App = () => {
           <h2 className="text-4xl md:text-5xl font-display mb-2 leading-tight">
             You're <span className="text-gold italic">invited.</span>
           </h2>
-          <p className="text-[11px] opacity-40 mb-6 font-body tracking-wide">Confirm your attendance - it only takes a moment.</p>
+          <p className="text-[11px] opacity-40 mb-6 md:mb-3 font-body tracking-wide">Confirm your attendance - it only takes a moment.</p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
 
@@ -275,7 +277,7 @@ const App = () => {
             </div>
 
             {/* CONSENT AND SUBMIT */}
-            <div className="space-y-4 pt-2">
+            <div className="space-y-4 pt-2 md:pt-1">
               <label className="flex items-start gap-3 p-4 border border-border-green/20 bg-deep-green/30 cursor-pointer group">
                 <input type="checkbox" checked={formData.consent} onChange={(e) => setFormData(prev => ({ ...prev, consent: e.target.checked }))} />
                 <div className="space-y-2">
