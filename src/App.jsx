@@ -213,7 +213,7 @@ const App = () => {
 
       {/* RIGHT PANEL: REGISTRATION */}
       <motion.div
-        className={`w-full md:w-1/2 bg-panel-green min-h-screen relative z-40 flex flex-col p-8 md:p-14 lg:p-16 
+        className={`w-full md:w-1/2 bg-panel-green min-h-screen relative z-40 flex flex-col p-6 md:p-10 lg:p-12
           ${isMobile ? (isFormOpen ? 'fixed inset-0 overflow-y-auto' : 'hidden') : 'static'}`}
         initial={isMobile ? { y: '100%' } : false}
         animate={isMobile && isFormOpen ? { y: 0 } : false}
@@ -223,23 +223,23 @@ const App = () => {
           <button onClick={() => setIsFormOpen(false)} className="absolute top-3 right-8 text-gold-muted hover:text-gold z-50"><X size={24} /></button>
         )}
 
-        <div className="max-w-2xl mx-auto w-full relative pt-4">
-          <div className="flex items-center justify-end gap-3 mb-8">
+        <div className="max-w-2xl mx-auto w-full relative pt-2">
+          <div className="flex items-center justify-end gap-3 mb-5">
             <div className="flex-1 h-[1px] bg-gold opacity-10"></div>
             <p className="text-xs font-bold tracking-[0.4em] text-gold uppercase whitespace-nowrap">RSVP</p>
           </div>
 
-          <h2 className="text-5xl md:text-6xl font-display mb-3 leading-tight">
+          <h2 className="text-4xl md:text-5xl font-display mb-2 leading-tight">
             You're <span className="text-gold italic">invited.</span>
           </h2>
-          <p className="text-[11px] opacity-40 mb-10 font-body tracking-wide">Confirm your attendance - it only takes a moment.</p>
+          <p className="text-[11px] opacity-40 mb-6 font-body tracking-wide">Confirm your attendance - it only takes a moment.</p>
 
-          <form onSubmit={handleSubmit} className="space-y-12">
+          <form onSubmit={handleSubmit} className="space-y-6">
 
             {/* SECTION 1: YOUR DETAILS */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div className="divider-label"><span className="text-section-label">Your Details</span></div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-4">
                 <div className="space-y-2">
                   <div className="flex items-start gap-1.5"><label>Full Name</label><span className="text-gold text-[10px] mt-0.5">*</span></div>
                   <input name="fullName" value={formData.fullName} onChange={handleInputChange} required type="text" placeholder="Your full name" />
@@ -261,7 +261,7 @@ const App = () => {
             </div>
 
             {/* SECTION 2: YOUR BACKGROUND */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div className="divider-label"><span className="text-section-label">Your Background</span></div>
               <div className="space-y-2 col-span-full">
                 <div className="flex items-start gap-1.5"><label>Organisation</label><span className="text-gold text-[10px] mt-0.5">*</span></div>
@@ -282,8 +282,8 @@ const App = () => {
             </div>
 
             {/* CONSENT AND SUBMIT */}
-            <div className="space-y-8 pt-4">
-              <label className="flex items-start gap-4 p-6 border border-border-green/20 bg-deep-green/30 cursor-pointer group">
+            <div className="space-y-4 pt-2">
+              <label className="flex items-start gap-3 p-4 border border-border-green/20 bg-deep-green/30 cursor-pointer group">
                 <input type="checkbox" checked={formData.consent} onChange={(e) => setFormData(prev => ({ ...prev, consent: e.target.checked }))} />
                 <div className="space-y-2">
                   <p className="text-[11px] font-bold tracking-wide group-hover:text-gold transition-colors">
@@ -294,7 +294,7 @@ const App = () => {
               </label>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-px bg-border-green/20">
-                <button type="submit" disabled={loading} className="btn-primary py-6 tracking-[0.3em]">
+                <button type="submit" disabled={loading} className="btn-primary py-4 tracking-[0.3em]">
                   {loading ? 'Processing...' : 'Accept Invitation'}
                 </button>
               </div>
