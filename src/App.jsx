@@ -153,7 +153,7 @@ const App = () => {
           <div className="absolute inset-0 bg-black/70 z-10"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-deep-green via-transparent to-transparent z-10"></div>
           <img
-            src="/assets/images/hero_bg.png"
+            src="/assets/images/hero.png"
             alt="Office background"
             className="w-full h-full object-cover scale-110"
           />
