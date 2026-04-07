@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import logo from './assets/main_logo.png'
 import { toast } from 'react-toastify'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Calendar, MapPin, Clock, Info } from 'lucide-react'
 import emailjs from '@emailjs/browser'
+import AdminEntries from './AdminEntries'
 
 // ── LEGAL MODAL COMPONENT ──────────────────────────────────────────
 const LegalModal = ({ title, content, isOpen, onClose }) => {
@@ -50,7 +52,7 @@ const LegalModal = ({ title, content, isOpen, onClose }) => {
   )
 }
 
-const App = () => {
+const LandingPage = () => {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isToSOpen, setIsToSOpen] = useState(false)
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
@@ -351,6 +353,17 @@ const App = () => {
         )}
       />
     </div>
+  )
+}
+
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/admin/entries" element={<AdminEntries />} />
+      </Routes>
+    </Router>
   )
 }
 
