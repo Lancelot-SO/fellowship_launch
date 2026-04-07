@@ -10,6 +10,8 @@ const AdminEntries = () => {
   const [entries, setEntries] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const ITEMS_PER_PAGE = 10
 
   const fetchEntries = async () => {
     setLoading(true)
@@ -37,6 +39,16 @@ const AdminEntries = () => {
     entry.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     entry.organisation?.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredEntries.length / ITEMS_PER_PAGE)
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+  const paginatedEntries = filteredEntries.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+
+  // Reset to first page when search changes
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchTerm])
 
   const downloadCSV = () => {
     const headers = ['Name', 'Email', 'Phone', 'Organisation', 'Source', 'Date']
@@ -136,8 +148,8 @@ const AdminEntries = () => {
                       </div>
                     </td>
                   </tr>
-                ) : filteredEntries.length > 0 ? (
-                  filteredEntries.map((entry) => (
+                ) : paginatedEntries.length > 0 ? (
+                  paginatedEntries.map((entry) => (
                     <motion.tr 
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -190,6 +202,60 @@ const AdminEntries = () => {
               </div>
             </div>
           </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="p-6 border-t border-border-green/20 flex flex-col sm:flex-row justify-between items-center gap-6">
+              <div className="flex items-center gap-2">
+                <p className="text-[10px] uppercase tracking-widest opacity-40">
+                  Showing <span className="text-gold font-bold">{startIndex + 1}</span> to <span className="text-gold font-bold">{Math.min(startIndex + ITEMS_PER_PAGE, filteredEntries.length)}</span> of <span className="text-gold font-bold">{filteredEntries.length}</span>
+                </p>
+              </div>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 border border-border-green hover:border-gold disabled:opacity-20 disabled:hover:border-border-green transition-all text-[10px] uppercase tracking-widest font-bold flex items-center gap-2"
+                >
+                  <ChevronLeft size={14} />
+                  Previous
+                </button>
+                <div className="flex items-center gap-2">
+                  {[...Array(totalPages)].map((_, i) => {
+                    const page = i + 1
+                    // Only show 5 pages nearby if many
+                    if (totalPages > 5) {
+                      if (page !== 1 && page !== totalPages && (page < currentPage - 1 || page > currentPage + 1)) {
+                        if (page === currentPage - 2 || page === currentPage + 2) return <span key={page} className="opacity-20 text-[10px]">...</span>
+                        return null
+                      }
+                    }
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-8 h-8 flex items-center justify-center text-[10px] font-bold border transition-all ${
+                          currentPage === page 
+                          ? 'bg-gold text-deep-green border-gold' 
+                          : 'border-border-green text-gold-muted hover:border-gold-muted'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    )
+                  })}
+                </div>
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 border border-border-green hover:border-gold disabled:opacity-20 disabled:hover:border-border-green transition-all text-[10px] uppercase tracking-widest font-bold flex items-center gap-2"
+                >
+                  Next
+                  <ChevronLeft size={14} className="rotate-180" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
